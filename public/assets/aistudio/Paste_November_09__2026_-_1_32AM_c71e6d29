@@ -1,0 +1,777 @@
+# ICE — Independent Identity Verification Platform
+## Master Product, Architecture, Branding and Initial Implementation Brief
+
+You are the principal software architect, senior full-stack engineer, product designer and security engineer responsible for building ICE: an independent, enterprise-grade identity verification platform.
+
+This is a serious, long-term software product. It is intended to become a reusable identity verification service that multiple independent businesses can integrate into their own applications through APIs, SDKs and hosted verification journeys.
+
+ICE should be designed to compete with established identity verification platforms such as Persona. Do not claim that ICE is superior without measurable evidence. Build a technically credible, secure and extensible foundation.
+
+Do not build a generic admin dashboard and call it an identity verification platform. The product must have distinct customer, business, developer and internal platform experiences.
+
+---
+
+# 1. PRODUCT IDENTITY
+
+Product name: ICE
+
+Full description: ICE Identity Verification Platform.
+
+Brand direction:
+- Premium enterprise identity and trust technology.
+- Modern, precise, professional and restrained.
+- Strong visual hierarchy and excellent usability.
+- Clean, minimal layouts with no unnecessary decoration.
+- No excessive gradients, glassmorphism, floating decorations or oversized cards.
+- Avoid excessive shadows.
+- Use clear typography, spacing and consistent components.
+
+Brand palette:
+- Midnight Navy: #101C2C
+- Deep Navy: #172B43
+- ICE Blue: #2676D2
+- Cyan Accent: #26B8C7
+- White: #FFFFFF
+- Mist Grey: #F4F7FA
+- Slate Text: #536273
+- Success: #16845B
+- Warning: #C58A27
+- Error: #C44747
+
+Use a modern sans-serif typeface such as Inter.
+
+Logo direction:
+- A simple, recognizable shield/check or identity-protection symbol.
+- ICE wordmark.
+- Must work in light and dark backgrounds.
+- Do not use emoji as the logo.
+- Create a consistent design system with reusable components, spacing, typography, form controls, tables, navigation and status indicators.
+
+Suggested tagline: Verify. Trust. Grow.
+
+The brand should communicate accuracy, privacy, security and institutional trust.
+
+---
+
+# 2. WHAT ICE DOES
+
+ICE helps businesses verify identities and assess identity-related risks.
+
+Core capabilities:
+
+1. Identity document capture and processing.
+2. Document classification.
+3. OCR and structured data extraction.
+4. Document image quality assessment.
+5. Document consistency and forensic signals.
+6. Selfie capture and biometric verification.
+7. Face comparison between a document portrait and a live selfie.
+8. Liveness and presentation-attack detection.
+9. Duplicate identity and document detection.
+10. Configurable verification workflows.
+11. Risk indicators and explainable findings.
+12. Human review and case management.
+13. Audit trails and reporting.
+14. API, SDK and webhook integrations.
+
+ICE must distinguish between:
+- A document image that appears visually consistent.
+- Identity information that is internally consistent.
+- A biometric comparison that meets a defined threshold.
+- An identity independently authenticated against an authorized authoritative source.
+
+Never represent an OCR result or visual inspection as official government identity verification.
+
+If no authorized external identity source is connected, an authoritative check must explicitly show NOT_PERFORMED.
+
+---
+
+# 3. FOUR DISTINCT PRODUCT INTERFACES
+
+Build one cohesive application with four clearly separated interfaces and their own navigation, layouts and access boundaries.
+
+Use separate route groups and reusable components. Do not put every user into the same dashboard.
+
+## A. ICE Verify — Customer-facing verification experience
+
+This is the interface used by people whose identities are being verified.
+
+It must be:
+- Mobile-first.
+- Responsive.
+- Simple enough for non-technical users.
+- Fast and accessible.
+- Suitable for a person opening a verification link from a company's application or phone.
+
+The person being verified should not need a permanent ICE account.
+
+Create a hosted verification journey with these stages:
+
+1. Welcome and explanation of the verification request.
+2. Company identity and verification purpose.
+3. Privacy notice and required consent.
+4. Personal information form.
+5. Identity document selection.
+6. Document capture using camera or upload.
+7. Image quality feedback.
+8. Selfie capture when required.
+9. Liveness verification stage.
+10. Submission and processing status.
+11. Additional evidence request when necessary.
+12. Completion and reference number.
+
+Support configurable document types, beginning with:
+- Kenyan National Identity Card.
+- Kenyan passport.
+- Kenyan alien identity documentation.
+- KRA PIN certificate.
+- Other supporting documents.
+
+Do not assume every verification requires every document or biometric step. The requesting company must configure its requirements.
+
+Show clear progress, helpful instructions, capture guidance and understandable error messages.
+
+The flow must be designed for phones with limited screen space and inconsistent internet connectivity.
+
+## B. Company Workspace — Business customer interface
+
+Each company using ICE receives its own isolated workspace.
+
+Create a professional responsive dashboard with these sections:
+
+1. Overview
+2. Verifications
+3. Customers
+4. Review Queue
+5. Cases
+6. Risk Intelligence
+7. Workflows
+8. Reports and Analytics
+9. Team and Access Management
+10. Audit Trail
+11. Developer Settings
+12. Organization Settings
+
+Overview dashboard should include meaningful operational metrics:
+- Total verification requests.
+- Completed verifications.
+- Pending verifications.
+- Failed verifications.
+- Manual review queue.
+- Approval and rejection breakdown.
+- Processing time.
+- Verification activity trend.
+
+Use realistic synthetic demonstration data, clearly marked as demo data. Never imply these are actual customers or real verification results.
+
+Verification details should have a structured evidence view:
+- Submitted personal information.
+- Uploaded documents and versions.
+- Extracted OCR fields.
+- Image quality results.
+- Biometric results where available.
+- Risk indicators.
+- Processing history.
+- Reviewer actions.
+- Final decision and reason.
+
+A company's staff must be able to review a case on both desktop and mobile.
+
+## C. ICE Developer Portal
+
+This is for companies integrating ICE into their own software.
+
+Include:
+- API documentation.
+- Authentication guide.
+- API credentials interface.
+- Sandbox environment.
+- Verification API examples.
+- Webhook configuration.
+- Webhook delivery history.
+- SDK documentation.
+- Integration logs.
+- API usage overview.
+- Error codes and troubleshooting.
+- Test verification journey.
+
+Design for developers who need to integrate ICE without manually operating the company dashboard.
+
+Never expose secret API credentials in client-side code. Show secret values only once when generated and store secure hashes where appropriate.
+
+## D. ICE Platform Console — ICE internal operations
+
+This is a separate internal interface accessible only to authorized ICE platform personnel.
+
+Include:
+- Global platform overview.
+- Organization management.
+- ICE internal staff and roles.
+- Platform health and service status.
+- Processing engine management.
+- Model version management.
+- Model evaluation.
+- Security events.
+- Platform audit logs.
+- Support access requests.
+- Platform configuration.
+
+ICE internal administrators must not automatically have unrestricted access to all customer documents.
+
+Sensitive support access must require explicit authorization, a documented purpose, a limited time window and an immutable audit record.
+
+Never expose internal platform administration to ordinary company users.
+
+---
+
+# 4. MULTI-TENANT ARCHITECTURE — CRITICAL
+
+ICE is a multi-tenant platform.
+
+Multiple independent companies will use the same platform and may verify the same individual.
+
+The default architecture must use one PostgreSQL database/cluster with strict logical tenant isolation.
+
+Every tenant-owned record must have an organization/tenant identifier.
+
+Enforce tenant boundaries using:
+- PostgreSQL Row-Level Security.
+- Tenant-aware authorization in server-side services.
+- Composite foreign keys that prevent cross-tenant relationships.
+- Tenant-scoped queries.
+- Tenant-aware storage paths.
+- Explicit authorization checks for every sensitive operation.
+
+Do not rely on frontend filtering for tenant isolation.
+
+A company must never be able to access another company's:
+- Customers.
+- Verification sessions.
+- Documents.
+- Selfies or biometric data.
+- Cases.
+- Risk results.
+- Audit logs.
+- API credentials.
+- Reports.
+
+## Same person, multiple companies
+
+This is a fundamental architectural requirement.
+
+Example:
+
+John verifies his identity with Company A. Later, John verifies with Company B.
+
+By default:
+- Company A owns its verification case and submitted evidence.
+- Company B creates its own verification case.
+- Company B cannot automatically see Company A's documents, results or customer history.
+- The system must not expose to Company B that John was previously verified by Company A.
+
+Design the architecture so a privacy-preserving reusable identity capability could be introduced later, but do not enable cross-company evidence reuse by default.
+
+Any future reuse must require:
+- A valid legal basis.
+- Explicit, informed consent where required.
+- A defined receiving-company purpose.
+- Evidence scope and freshness controls.
+- Access authorization.
+- Complete audit records.
+
+Do not create a universal shared customer profile that silently combines every company's customer data.
+
+Keep the following concepts distinct:
+1. Person or identity subject.
+2. Company-specific verification.
+3. Company-specific customer relationship.
+4. Document and evidence ownership.
+
+A company must not inherit another company's verification decision.
+
+---
+
+# 5. DATA AND STORAGE ARCHITECTURE
+
+Use PostgreSQL as the target relational database.
+
+Do not automatically substitute Firestore or another NoSQL database.
+
+Design the database with:
+- UUID primary keys.
+- Explicit foreign keys.
+- Appropriate unique constraints.
+- Composite tenant-aware constraints.
+- Created and updated timestamps.
+- Status fields with controlled values.
+- Database indexes for common queries.
+- Versioned workflow and decision records.
+- Migration files.
+- Clear ownership and retention fields.
+
+Core entities should include:
+
+- organizations
+- organization_settings
+- users
+- roles
+- permissions
+- role_permissions
+- user_roles
+- identity_subjects
+- organization_customers
+- verification_sessions
+- verification_requirements
+- identity_documents
+- document_versions
+- document_processing_jobs
+- extracted_fields
+- document_quality_results
+- document_authenticity_signals
+- biometric_sessions
+- biometric_consents
+- liveness_results
+- face_comparison_results
+- risk_indicators
+- duplicate_match_candidates
+- workflows
+- workflow_versions
+- workflow_executions
+- verification_decisions
+- review_cases
+- reviewer_actions
+- audit_events
+- api_credentials
+- webhook_endpoints
+- webhook_deliveries
+- model_versions
+- model_evaluations
+- support_access_requests
+
+Do not create an unnecessarily complicated schema without explaining why an entity exists.
+
+Documents, selfies and other sensitive files must be stored in private object storage, not as database blobs.
+
+The database should store file metadata, storage references, ownership, processing status and access policy.
+
+Never use public permanent URLs for identity documents.
+
+Use short-lived signed access URLs issued only after authorization.
+
+Design storage paths to include tenant isolation.
+
+---
+
+# 6. BIOMETRIC VERIFICATION — CORE PRODUCT MODULE
+
+Biometrics are part of the ICE product vision. Do not treat this as an empty future placeholder.
+
+Design a dedicated biometric verification module with these capabilities:
+
+1. Selfie capture.
+2. Face detection and image quality checks.
+3. Liveness detection.
+4. Presentation-attack detection.
+5. One-to-one face comparison between the ID portrait and the captured selfie.
+6. Explainable processing results and confidence/score handling.
+7. Configurable thresholds and policy decisions.
+8. Reviewer escalation when results are inconclusive.
+
+Keep liveness detection and face comparison as separate checks.
+
+Do not implement one-to-many face identification or cross-tenant face searching.
+
+The module must include:
+- Consent recording.
+- Purpose limitation.
+- Encryption.
+- Strict access controls.
+- Retention and deletion policies.
+- Processing status.
+- Model and version tracking.
+- Audit events.
+- A non-biometric alternative where appropriate.
+
+Do not invent biometric accuracy percentages.
+
+Do not claim certification, production-grade liveness or resistance to all spoofing attacks without independent evaluation.
+
+Build an engine adapter architecture so biometric providers or locally deployed models can be integrated without redesigning the application.
+
+The first implementation must provide the real capture workflow, consent handling, data model, secure processing boundaries and result states. If no validated liveness or face-comparison engine is configured, show NOT_CONFIGURED or NOT_PERFORMED. Never manufacture a successful biometric result.
+
+Do not use face similarity alone to automatically determine access to financial or other high-impact services.
+
+---
+
+# 7. DOCUMENT INTELLIGENCE MODULE
+
+Build ICE Intelligence as a distinct processing subsystem.
+
+Its pipeline should support:
+
+1. File type and size validation.
+2. Image quality assessment.
+3. Rotation and orientation correction.
+4. Image preprocessing.
+5. Document classification.
+6. OCR.
+7. Structured field extraction.
+8. Field normalization.
+9. Cross-field consistency checks.
+10. Document image anomaly detection.
+11. Processing result and confidence recording.
+
+Initial document fields may include:
+- Full name.
+- Document number.
+- Date of birth.
+- Date of issue.
+- Expiry date.
+- Nationality.
+- Sex, only where required for the stated purpose and lawful.
+- Address, where present and necessary.
+
+Store field-level confidence and processing provenance.
+
+Do not turn OCR confidence into a probability that a person is genuine.
+
+Keep OCR, image quality, document consistency and authoritative identity authentication as separate results.
+
+Create adapters so OCR and image processing engines can be benchmarked and replaced.
+
+Use specialist computer-vision and OCR technologies where appropriate. Do not use a general-purpose language model as the sole authority for document authenticity or identity decisions.
+
+---
+
+# 8. RISK INTELLIGENCE
+
+Build a transparent risk engine that produces explainable signals, not unexplained accusations.
+
+Potential signals:
+- Repeated document submissions.
+- Exact file hash matches.
+- Perceptual image similarity.
+- Conflicting identity fields.
+- Repeated failed verification attempts.
+- Suspicious session patterns.
+- Inconsistent document dates.
+- Unusual verification activity.
+
+A duplicate candidate is not proof of fraud.
+
+Keep risk indicators separate from final decisions.
+
+Do not expose one company's fraud indicators or customer records to another company by default.
+
+Each risk result must record:
+- Signal type.
+- Evidence reference.
+- Severity.
+- Reason.
+- Timestamp.
+- Engine or rule version.
+- Review status.
+
+---
+
+# 9. WORKFLOW AND DECISION ENGINE
+
+Companies must be able to configure verification requirements.
+
+Examples:
+- Document only.
+- Document plus selfie.
+- Document plus liveness and face comparison.
+- Additional supporting document.
+- Manual review required.
+- Different rules for different customer types.
+
+Support versioned workflows.
+
+A verification must retain the exact workflow version under which it was processed.
+
+Use explainable outcomes such as:
+- VERIFIED
+- REJECTED
+- NEEDS_REVIEW
+- NEEDS_MORE_INFORMATION
+- PROCESSING
+- FAILED
+- EXPIRED
+
+Do not automatically equate technical processing failure with identity fraud.
+
+Record decision reasons and supporting evidence.
+
+Company-configured policies should control whether an automated result is accepted, rejected or escalated.
+
+---
+
+# 10. CASE MANAGEMENT AND HUMAN REVIEW
+
+The company that requests verification is normally responsible for its customer decision.
+
+Build a review workspace where authorized company reviewers can:
+- Open a review case.
+- Inspect submitted evidence.
+- View OCR fields and confidence.
+- View document quality findings.
+- View biometric results where permitted.
+- Request a clearer document.
+- Request additional evidence.
+- Escalate a case.
+- Approve or reject with a reason.
+- Record reviewer notes.
+- View the full case history.
+
+ICE provides the evidence and platform. It must not silently take over the company's compliance decision.
+
+An optional separately contracted ICE-managed review service may be supported architecturally later, with explicit access permissions, time limits and audit records.
+
+---
+
+# 11. ROLES AND ACCESS CONTROL
+
+Company roles should include:
+
+- Organization Owner.
+- Organization Admin.
+- Compliance Manager.
+- KYC Reviewer.
+- Fraud Analyst.
+- Auditor.
+- Developer.
+- Operations Analyst.
+
+Use granular permission-based RBAC.
+
+Examples:
+- A developer manages API keys and webhooks but does not automatically get access to identity documents.
+- An auditor can inspect permitted records but cannot modify decisions.
+- A reviewer can inspect and decide cases within assigned permissions.
+- An organization administrator manages team members and settings but cannot access ICE global administration.
+
+ICE internal roles should be separate:
+- Platform Super Administrator.
+- Security Administrator.
+- Platform Operations.
+- Support Engineer.
+- Model Administrator.
+- Privacy Officer.
+
+Use deny-by-default authorization.
+
+Enforce permissions on the server, not just by hiding buttons in the UI.
+
+---
+
+# 12. AUDIT AND SECURITY
+
+Implement two separate audit boundaries.
+
+Company audit:
+- Company user access.
+- Document viewing.
+- Case decisions.
+- Reviewer actions.
+- Workflow changes.
+- Team and permission changes.
+- API credential changes.
+- Report access.
+
+ICE platform audit:
+- ICE staff actions.
+- Platform configuration.
+- Model changes.
+- Security events.
+- Support access.
+- Infrastructure and service changes.
+
+Tenant audit records must never be visible to other tenants.
+
+Audit records should be append-only and tamper-evident.
+
+Security requirements:
+- No secrets in source code.
+- No credentials in browser bundles.
+- Server-side secret management.
+- Input validation.
+- File upload validation.
+- Rate limiting.
+- Secure session management.
+- CSRF protection where applicable.
+- Safe error handling.
+- No sensitive document contents in application logs.
+- Encryption in transit and at rest.
+- Least-privilege access.
+- Secure password and account recovery practices.
+- Security event logging.
+
+Design for compliance with applicable data protection requirements, including Kenya's Data Protection Act and relevant ODPC requirements. Do not claim compliance merely because security features exist. A proper legal review, DPIA and operational controls are required before production processing of real identity or biometric data.
+
+---
+
+# 13. TECHNICAL ARCHITECTURE
+
+Use the following initial technology direction:
+
+Frontend:
+- Next.js.
+- React.
+- TypeScript.
+- Accessible, reusable components.
+- Responsive design.
+
+Initial application server:
+- Node.js and TypeScript, compatible with the Google AI Studio full-stack runtime.
+- Clearly separated service and domain layers.
+- Server-side API routes.
+- OpenAPI-oriented API design.
+
+Database:
+- PostgreSQL.
+- Versioned migrations.
+- Tenant-aware relational design.
+- Row-Level Security.
+
+File storage:
+- Private S3-compatible object storage adapter.
+
+Document intelligence and biometrics:
+- Separate Python-based processing services when required.
+- OpenCV and appropriate specialist OCR/computer-vision libraries.
+- ONNX Runtime or other suitable inference runtimes where appropriate.
+- Model/provider adapters and version tracking.
+
+Background processing:
+- Design asynchronous job boundaries for OCR, document analysis and biometric processing.
+- Do not block long-running processing inside ordinary web requests.
+
+Testing:
+- Unit tests.
+- API tests.
+- Database and tenant-isolation tests.
+- End-to-end browser tests.
+- Security and permission tests.
+
+Architecture:
+- Start with a modular monolith.
+- Keep clear module boundaries.
+- Do not create unnecessary microservices.
+- Design interfaces so intensive processing engines can later be deployed independently.
+- Do not hardwire the application to one OCR or biometric vendor.
+
+IMPORTANT GOOGLE AI STUDIO CONSTRAINT:
+The initial app must work within the available Google AI Studio web application runtime. Do not pretend that a separate Python service, PostgreSQL database or external storage service is already connected when it is not. Create clean adapters and configuration requirements. Never silently replace a missing production service with fake successful results.
+
+---
+
+# 14. INITIAL BUILD SCOPE — IMPLEMENT NOW
+
+Do not attempt to generate the entire finished identity verification platform in one unverified step.
+
+Implement the first meaningful product foundation now.
+
+Build these items:
+
+1. ICE branding and reusable design system.
+2. Application routing and four distinct interface layouts.
+3. Responsive navigation and page structure.
+4. Company Workspace dashboard with clearly marked synthetic data.
+5. Company verification list and detailed verification view.
+6. Customer-facing ICE Verify journey with functional form state and navigation.
+7. Developer Portal with API documentation structure, sandbox layout and webhook interface.
+8. Internal ICE Platform Console with organization and platform management layouts.
+9. Role and permission architecture.
+10. PostgreSQL-oriented database schema design and migration foundation.
+11. Tenant isolation architecture and authorization service boundaries.
+12. Document and biometric module boundaries, data models and status handling.
+13. Audit event architecture.
+14. Automated tests for critical routing, permission boundaries and tenant isolation logic.
+
+The biometric and document modules must be represented as real product modules with proper data structures, user journeys and service interfaces. Do not generate fake OCR, liveness, face-match or authenticity results.
+
+For development demonstrations, use synthetic documents and clearly labelled demonstration results only. Never request or store real national IDs, passports, selfies or biometric information during this initial prototype.
+
+---
+
+# 15. DESIGN QUALITY EXPECTATIONS
+
+The application should look like a serious enterprise identity technology product.
+
+Design principles:
+- Strong visual hierarchy.
+- Clear typography.
+- Consistent navigation.
+- Professional tables.
+- Useful filters and search.
+- Clear status indicators.
+- Meaningful empty states.
+- Helpful loading and error states.
+- Accessible contrast.
+- Mobile-responsive layouts.
+- Minimal unnecessary decoration.
+- No excessive card nesting.
+- No excessive gradients or shadows.
+- No generic template appearance.
+
+The company dashboard should feel like a professional compliance and identity operations platform.
+
+The customer verification flow should feel simple, reassuring and trustworthy.
+
+The developer portal should feel technical, clear and documentation-oriented.
+
+The internal console should feel like a controlled platform operations environment.
+
+Do not make all four interfaces look identical. They should share the ICE design system but have different information architecture.
+
+---
+
+# 16. DEVELOPMENT RULES
+
+Follow these rules throughout development:
+
+1. Create real files and working components, not just a written plan.
+2. Do not claim an integration works when it is only a mock.
+3. Clearly identify demo data and simulated operations.
+4. Do not invent verification results or accuracy metrics.
+5. Do not hardcode secrets.
+6. Do not use real personal identity data.
+7. Do not weaken tenant isolation for convenience.
+8. Do not implement security only in the frontend.
+9. Do not create unnecessary frameworks or services.
+10. Keep code modular, typed, documented and testable.
+11. Preserve working functionality when making later changes.
+12. Fix build and runtime errors before declaring a task complete.
+13. Do not silently remove existing functionality.
+14. Explain any infrastructure requirement that cannot be provisioned inside AI Studio.
+
+Do not spend the entire response explaining architecture. Implement the initial foundation.
+
+---
+
+# 17. FIRST EXECUTION AND COMPLETION REPORT
+
+Start by creating the application structure and implementing the initial build scope.
+
+Before finishing:
+- Run the available build/type checks.
+- Run available automated tests.
+- Fix errors you encounter.
+- Verify that all four interface areas load.
+- Verify the customer verification journey can be completed using synthetic demonstration data.
+- Verify that navigation and responsive layouts work.
+- Verify that demo functionality is clearly distinguished from real integrations.
+- Verify that no fake biometric or document verification success is presented as genuine.
+
+When done, report:
+
+1. What was actually implemented.
+2. Which routes and interfaces are working.
+3. Which database and infrastructure components are real versus not yet connected.
+4. Which tests were run and their actual results.
+5. Known limitations.
+6. The next recommended implementation milestone.
+
+Begin implementation now. Do not stop at a proposal or a static mockup.
